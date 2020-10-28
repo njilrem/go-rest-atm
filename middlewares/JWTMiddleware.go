@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/njilrem/go-rest-atm/services"
 	"fmt"
+	"github.com/njilrem/go-rest-atm/services"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -14,7 +14,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		const BEARER_SCHEMA = "Bearer"
 		authHeader := c.GetHeader("Authorization")
 		tokenString := authHeader[len(BEARER_SCHEMA):]
-		token, err := service.JWTAuthService().ValidateToken(tokenString)
+		token, err := services.JWTAuthService().ValidateToken(tokenString)
 		if token.Valid {
 			claims := token.Claims.(jwt.MapClaims)
 			fmt.Println(claims)

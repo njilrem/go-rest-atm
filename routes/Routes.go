@@ -2,7 +2,6 @@ package routes
 
 import (
   "github.com/njilrem/go-rest-atm/controllers"
-  "github.com/njilrem/go-rest-atm/services"
 	"github.com/gin-gonic/gin"
 )
 

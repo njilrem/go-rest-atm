@@ -1,24 +1,24 @@
 package main
 
 import (
-	"github.com/njilrem/go-rest-atm/routes"
-	"github.com/njilrem/go-rest-atm/models"
-	"github.com/njilrem/go-rest-atm/config"
 	"fmt"
+	"github.com/njilrem/go-rest-atm/config"
+	"github.com/njilrem/go-rest-atm/models"
+	"github.com/njilrem/go-rest-atm/routes"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var err error
 
 func main() {
-	config.DB, err = gorm.Open("mysql", config.DbURL(config.BuildDBConfig()))
+	config.DB, err = gorm.Open(mysql.Open(config.DbURL(config.BuildDBConfig())), &gorm.Config{})
 
 	if err != nil {
 		fmt.Println("Status:", err)
 	}
 
-	defer config.DB.Close()
 	config.DB.AutoMigrate(&models.Account{})
 
 	r := routes.SetupRouter()
