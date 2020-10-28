@@ -7,7 +7,6 @@ type Account struct {
 	Email string `json:"email"`
 	Phone string `json:"phone"`
 	Address string `json:"address"`
-
 }
 
 // TableName db table name 
