@@ -1,6 +1,19 @@
 version: '3.3'
 services:
+  atm-core:
+    container_name: atm-core
+    build: ./
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    command: /server
+    networks:
+      - app-network
+    depends_on:
+      - db
   db:
+    container_name: atm-db
     image: mysql:5.7
     restart: always
     env_file: .env
@@ -15,5 +28,13 @@ services:
       - '3306'
     volumes:
       - bank:/var/lib/mysql
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
 volumes:
   bank:

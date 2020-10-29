@@ -1,9 +1,8 @@
 package config
-import 
-(
+import (
 	"fmt"
-	"gorm.io/gorm"
 	"github.com/joho/godotenv"
+	"gorm.io/gorm"
 	"log"
 	"os"
 )
@@ -31,11 +30,11 @@ type DBConfig struct {
 }
 func BuildDBConfig() *DBConfig {
 	dbConfig := DBConfig{
-	 Host:     "localhost",
+	 Host:     "host.docker.internal",
 	 Port:     3306,
-	 User:     goDotEnvVariable("MYSQL_USER"),
-	 Password: goDotEnvVariable("MYSQL_PASSWORD"),
-	 DBName:   goDotEnvVariable("MYSQL_DATABASE"),
+	 User:     os.Getenv("MYSQL_USER"),
+	 Password: os.Getenv("MYSQL_PASSWORD"),
+	 DBName:   os.Getenv("MYSQL_DATABASE"),
 	}
 	return &dbConfig
 }
