@@ -10,12 +10,12 @@ import (
 
 //jwt service
 type JWTService interface {
-	GenerateToken(cardNum string, exprireDate string, cvv2 string, isValidAccount bool) string
+	GenerateToken(cardNum string, expireDate string, cvv2 string, isValidAccount bool) string
 	ValidateToken(token string) (*jwt.Token, error)
 }
 type authCustomClaims struct {
 	cardNum string `json:"cardNum"`
-	exprireDate string `json:"expireDate"`
+	expireDate string `json:"expireDate"`
 	cvv2 string `json:"cvv2"`
 	isValidAccount bool `json:"isValidAccount"`
 	jwt.StandardClaims
@@ -41,10 +41,10 @@ func getSecretKey() string {
 	return secret
 }
 
-func (service *jwtServices) GenerateToken(cardNum string, exprireDate string, cvv2 string, isValidAccount bool) string {
+func (service *jwtServices) GenerateToken(cardNum string, expireDate string, cvv2 string, isValidAccount bool) string {
 	claims := &authCustomClaims{
 		cardNum,
-		exprireDate,
+		expireDate,
 		cvv2,
 		isValidAccount,
 		jwt.StandardClaims{
