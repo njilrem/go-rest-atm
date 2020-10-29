@@ -36,9 +36,23 @@ func main() {
 		fmt.Printf("Connected to the DB")
 	}
 
-	config.DB.AutoMigrate(&models.Account{})
+	err = config.DB.AutoMigrate(&models.Account{})
+
+	if err != nil {
+		fmt.Printf("Accounts auto migration failed")
+	}
+
+	err = config.DB.AutoMigrate(&models.Card{})
+
+	if err != nil {
+		fmt.Printf("Cards auto migration failed")
+	}
 
 	r := routes.SetupRouter()
 	//running
-	r.Run()
+	err = r.Run()
+
+	if err != nil {
+		panic("SERVER DIDN'T START")
+	}
 }

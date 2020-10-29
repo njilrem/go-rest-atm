@@ -4,6 +4,5 @@
 
 TODO
 
-* Add auth
-* Add card model
-* Add logging
+* Add auth 
+* Add uuid id for models

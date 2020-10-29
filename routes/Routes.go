@@ -1,8 +1,8 @@
 package routes
 
 import (
+  "github.com/gin-gonic/gin"
   "github.com/njilrem/go-rest-atm/controllers"
-	"github.com/gin-gonic/gin"
 )
 
 // SetupRouter ... setting up router

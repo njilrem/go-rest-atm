@@ -1,9 +1,9 @@
 package models
 
 import (
-	"github.com/njilrem/go-rest-atm/config"
 	"fmt"
-  //only need init() function
+	"github.com/njilrem/go-rest-atm/config"
+	//only need init() function
 	_ "github.com/go-sql-driver/mysql"
 )
 

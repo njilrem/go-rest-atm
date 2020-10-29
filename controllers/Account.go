@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"github.com/njilrem/go-rest-atm/models"
 	"fmt"
-	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/njilrem/go-rest-atm/models"
+	"net/http"
 )
 
 //GetAccounts ... Get all accounts
@@ -24,7 +24,7 @@ func GetAccounts(c *gin.Context) {
 	err := models.CreateAccount(&account)
 	if err != nil {
 	 fmt.Println(err.Error())
-	 c.AbortWithStatus(http.StatusNotFound)
+	 c.AbortWithStatus(http.StatusInternalServerError)
 	} else {
 	 c.JSON(http.StatusOK, account)
 	}
@@ -64,7 +64,7 @@ func GetAccounts(c *gin.Context) {
 	if err != nil {
 	 c.AbortWithStatus(http.StatusNotFound)
 	} else {
-	 c.JSON(http.StatusOK, gin.H{"id" + id: "is deleted"})
+	 c.JSON(http.StatusOK, gin.H{"result": id + " is deleted"})
 	}
  }
 
