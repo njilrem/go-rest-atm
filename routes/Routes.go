@@ -16,6 +16,12 @@ func SetupRouter() *gin.Engine {
     accountGroup.PUT("account/:id", controllers.UpdateAccount)
     accountGroup.DELETE("account/:id", controllers.DeleteAccount)
   }
+  cardGroup := r.Group("/cards-api")
+  {
+    cardGroup.GET("card/:id", controllers.GetCardsByHolderID)
+    cardGroup.PUT("card/:id", controllers.UpdateCard)
+    cardGroup.POST("card", controllers.CreateCard)
+  }
   return r
 }
 
