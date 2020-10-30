@@ -13,7 +13,7 @@ func GetCardById(card *Card, id string) (err error) {
 }
 
 func GetCardsByHolderId(card *[]Card, holderID string) (err error) {
-	if err = config.DB.Where("holderID = ?", holderID).Find(card).Error; err != nil {
+	if err = config.DB.Where("holder_id = ?", holderID).Find(card).Error; err != nil {
 		return err
 	}
 	return nil

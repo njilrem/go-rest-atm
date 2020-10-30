@@ -9,7 +9,9 @@ import (
 
 //GetAllAccounts Fetch all accounts data
 func GetAllAccounts(account *[]Account) (err error) {
-	if err = config.DB.Find(account).Error; err != nil {
+	if err = config.DB.Joins("JOIN cards on cards.holder_id=accounts.id").
+		Preload("Card").
+		Find(account).Error; err != nil {
 		return err
 	}
 	return nil
@@ -25,7 +27,10 @@ func CreateAccount(account *Account) (err error) {
 
 //GetAccountByID ... Fetch only one account by Id
 func GetAccountByID(account *Account, id string) (err error) {
-	if err = config.DB.Where("id = ?", id).First(account).Error; err != nil {
+	if err = config.DB.Where("accounts.id = ?", id).
+		Joins("JOIN cards on cards.holder_id=accounts.id").
+		Preload("Card").
+		First(account).Error; err != nil {
 		return err
 	}
 	return nil
