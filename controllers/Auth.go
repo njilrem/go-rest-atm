@@ -1,31 +1,36 @@
 package controllers
 
 import (
-	// "github.com/njilrem/go-rest-atm/models"
-	"github.com/njilrem/go-rest-atm/services"
-	"github.com/njilrem/go-rest-atm/dto"
-	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/njilrem/go-rest-atm/dto"
+	"github.com/njilrem/go-rest-atm/models"
+	"github.com/njilrem/go-rest-atm/services"
+	"golang.org/x/crypto/bcrypt"
+	"net/http"
 )
 
-type AuthController interface {
-	AuthAccount(ctx *gin.Context)
-}
-
-type authController struct {
-	jwtService services.JWTService
-}
-
-func AuthHandler(jwtService services.JWTService) AuthController {
-	return &authController{
-		jwtService: jwtService,
-	}
-}
-
-func (controller *authController) AuthAccount(ctx *gin.Context) {
+func AuthAccount(c *gin.Context) {
 	var credentials dto.AuthCredentials
-	if err := ctx.ShouldBindJSON(&credentials); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := c.ShouldBindJSON(&credentials); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"token": "1"})
+	var account models.Account
+	if err := models.GetAccountByCredentials(credentials, &account); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized!"})
+		return
+	}
+	if account.ID == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized!"})
+		return
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(account.Card[0].Cvv2), []byte(credentials.Cvv2)); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong Credentials!"})
+		return
+	} else {
+		card := account.Card[0]
+		token := services.JWTAuthService().GenerateToken(card.CardNum, card.ExpireDate, card.Cvv2, true)
+		c.JSON(http.StatusOK, gin.H{"token": token})
+	}
+
 }

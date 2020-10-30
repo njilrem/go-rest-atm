@@ -3,6 +3,8 @@ package models
 import (
 	"fmt"
 	"github.com/njilrem/go-rest-atm/config"
+	"github.com/njilrem/go-rest-atm/dto"
+
 	//only need init() function
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -31,7 +33,18 @@ func GetAccountByID(account *Account, id string) (err error) {
 		Joins("JOIN cards on cards.holder_id=accounts.id").
 		Preload("Card").
 		First(account).Error; err != nil {
-		return err
+			return err
+	}
+	return nil
+}
+
+func GetAccountByCredentials(credentials dto.AuthCredentials, account *Account) (err error) {
+	if err = config.DB.Where("cards.card_num = ? AND cards.expire_date = ?", credentials.CardNum, credentials.ExpireDate).
+		Joins("JOIN cards on cards.holder_id=accounts.id").
+		Preload("Card").
+		Find(account).
+		Error; err != nil {
+			return err
 	}
 	return nil
 }

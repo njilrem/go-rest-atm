@@ -2,7 +2,7 @@ package dto
 
 //Login credential
 type AuthCredentials struct {
-	cardNum string `json:"cardNum"`
-	exprireDate string `json:"expireDate"`
-	cvv2 string `json:"cvv2"`
+	CardNum     string `json:"cardNum"`
+	ExpireDate  string `json:"expireDate"`
+	Cvv2        string `json:"cvv2"`
 }

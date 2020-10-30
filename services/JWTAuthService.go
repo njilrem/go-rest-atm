@@ -14,22 +14,22 @@ type JWTService interface {
 	ValidateToken(token string) (*jwt.Token, error)
 }
 type authCustomClaims struct {
-	cardNum string `json:"cardNum"`
-	expireDate string `json:"expireDate"`
-	cvv2 string `json:"cvv2"`
-	isValidAccount bool `json:"isValidAccount"`
+	CardNum        string `json:"cardNum"`
+	ExpireDate     string `json:"expireDate"`
+	Cvv2           string `json:"cvv2"`
+	IsValidAccount bool   `json:"isValidAccount"`
 	jwt.StandardClaims
 }
 
 type jwtServices struct {
 	secretKey string
-	issure    string
+	issuer    string
 }
 
 func JWTAuthService() JWTService {
 	return &jwtServices{
 		secretKey: getSecretKey(),
-		issure:    "Cookie Bank",
+		issuer:    "Cookie Bank",
 	}
 }
 
@@ -49,7 +49,7 @@ func (service *jwtServices) GenerateToken(cardNum string, expireDate string, cvv
 		isValidAccount,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Minute * 15).Unix(),
-			Issuer:    service.issure,
+			Issuer:    service.issuer,
 			IssuedAt:  time.Now().Unix(),
 		},
 	}

@@ -22,6 +22,10 @@ func SetupRouter() *gin.Engine {
     cardGroup.PUT("card/:id", controllers.UpdateCard)
     cardGroup.POST("card", controllers.CreateCard)
   }
+  authGroup := r.Group("/auth")
+  {
+    authGroup.POST("pay", controllers.AuthAccount)
+  }
   return r
 }
 
