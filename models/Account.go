@@ -49,6 +49,14 @@ func GetAccountByCredentials(credentials dto.AuthCredentials, account *Account) 
 	return nil
 }
 
+func GetAuthAccount(credentials dto.AuthAdminCredentials, account *Account) (err error) {
+	if err = config.DB.Where("name = ? AND phone = ?", credentials.Name, credentials.Phone).
+		Find(account).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 //UpdateAccount ... Update account
 func UpdateAccount(account *Account, id string) (err error) {
 	fmt.Println(account)

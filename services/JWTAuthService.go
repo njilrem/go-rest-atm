@@ -54,7 +54,6 @@ func (service *jwtServices) GenerateToken(cardNum string, expireDate string, cvv
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
 	//encoded string
 	t, err := token.SignedString([]byte(service.secretKey))
 	if err != nil {
@@ -64,12 +63,15 @@ func (service *jwtServices) GenerateToken(cardNum string, expireDate string, cvv
 }
 
 func (service *jwtServices) ValidateToken(encodedToken string) (*jwt.Token, error) {
-	return jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
 		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
 			return nil, fmt.Errorf("Invalid token", token.Header["alg"])
-
 		}
 		return []byte(service.secretKey), nil
 	})
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
 
 }
