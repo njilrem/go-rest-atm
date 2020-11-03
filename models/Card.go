@@ -42,3 +42,15 @@ func UpdateCard(card *Card) (err error) {
 	config.DB.Save(card)
 	return nil
 }
+
+func ProcessTransaction(transaction Transaction) (err error) {
+	var card Card
+	if err = config.DB.Where("id = ?", transaction.CardID).Find(card).Error; err != nil {
+		log.Println(err)
+		return err
+	}
+	card.Balance -= transaction.Amount
+	/* IMAGINE PROCESSING A BANK OPERATION OF TRANSFERRING MONEY OVER HERE TSSSSS */
+	config.DB.Save(card)
+	return nil
+}
