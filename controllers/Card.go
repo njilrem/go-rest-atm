@@ -20,7 +20,7 @@ func GetCardsByHolderID(c *gin.Context) {
 
 func CreateCard(c *gin.Context) {
 	var card models.Card
-	c.BindJSON(&card)
+	_ = c.BindJSON(&card)
 	err := models.CreateCard(&card)
 	if err != nil {
 		fmt.Printf(err.Error())
@@ -37,7 +37,7 @@ func UpdateCard(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	}
-	c.BindJSON(&card)
+	_ = c.BindJSON(&card)
 	err = models.UpdateCard(&card)
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)

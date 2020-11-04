@@ -27,7 +27,8 @@ func SetupRouter() *gin.Engine {
   }
   authGroup := r.Group("/auth")
   {
-    authGroup.POST("pay", controllers.AuthAccount)
+    authGroup.POST("login", controllers.AuthAccount)
+    authGroup.POST("auth", controllers.AuthAdmin)
   }
   transactionGroup := r.Group("/transactions-api")
   transactionGroup.Use(middleware.AuthorizeJWT())

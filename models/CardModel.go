@@ -12,6 +12,7 @@ type Card struct {
 	DeletedAt  gorm.DeletedAt `gorm:"index"`
 	Balance    float64		  `json:"balance"`
 	Cvv2       string 		  `json:"cvv2"`
+	Pin        string		  `json:"pin"`
 	CardNum    string 		  `json:"cardNum"`
 	ExpireDate string 		  `json:"expireDate"`
 	HolderID   uint   		  `json:"holderID"`

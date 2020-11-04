@@ -30,6 +30,12 @@ func CreateCard(card *Card) (err error) {
 		return err
 	}
 	card.Cvv2 = string(hash)
+	hash, err = bcrypt.GenerateFromPassword([]byte(card.Pin), bcrypt.DefaultCost)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	card.Pin = string(hash)
 	if err = config.DB.Create(card).Error; err != nil {
 		log.Println(err)
 		return err
@@ -39,6 +45,22 @@ func CreateCard(card *Card) (err error) {
 
 func UpdateCard(card *Card) (err error) {
 	fmt.Println(card)
+	if len(card.Cvv2) == 3 {
+		hash, err := bcrypt.GenerateFromPassword([]byte(card.Cvv2), bcrypt.DefaultCost)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		card.Cvv2 = string(hash)
+	}
+	if len(card.Pin) == 4 {
+		hash, err := bcrypt.GenerateFromPassword([]byte(card.Pin), bcrypt.DefaultCost)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		card.Pin = string(hash)
+	}
 	config.DB.Save(card)
 	return nil
 }

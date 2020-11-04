@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"github.com/njilrem/go-rest-atm/config"
 	"github.com/njilrem/go-rest-atm/dto"
@@ -50,6 +51,9 @@ func GetAccountByCredentials(credentials dto.AuthCredentials, account *Account) 
 }
 
 func GetAuthAccount(credentials dto.AuthAdminCredentials, account *Account) (err error) {
+	if len(credentials.Phone) != 15 && len(credentials.Name) != 10{
+		return errors.New("bad credentials")
+	}
 	if err = config.DB.Where("name = ? AND phone = ?", credentials.Name, credentials.Phone).
 		Find(account).Error; err != nil {
 		return err
