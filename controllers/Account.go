@@ -43,7 +43,7 @@ func GetAccounts(c *gin.Context) {
  //UpdateAccount ... Update the account information
  func UpdateAccount(c *gin.Context) {
 	var account models.Account
-	id := c.Params.ByName("id")
+	id := c.Params.ByName("id") // if0wjfwef.com/accounts-api/account/5453 { "name": "ddd"}
 	err := models.GetAccountByID(&account, id)
 	if err != nil {
 	 c.JSON(http.StatusNotFound, account)

@@ -16,6 +16,7 @@ type Card struct {
 	CardNum    string 		  `json:"cardNum"`
 	ExpireDate string 		  `json:"expireDate"`
 	HolderID   uint   		  `json:"holderID"`
+	Transaction []Transaction `gorm:"foreignKey:card_id"`
 }
 
 // TableName db table name
