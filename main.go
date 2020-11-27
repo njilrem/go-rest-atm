@@ -51,7 +51,7 @@ func main() {
 	err = config.DB.AutoMigrate(&models.Transaction{})
 
 	if err != nil {
-		fmt.Printf("Accounts auto migration failed")
+		fmt.Printf("Transactions auto migration failed")
 	}
 
 	r := routes.SetupRouter()

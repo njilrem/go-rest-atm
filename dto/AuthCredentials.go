@@ -7,6 +7,12 @@ type AuthCredentials struct {
 	Cvv2        string `json:"cvv2"`
 }
 
+//Login credential
+type AuthCredentialsPIN struct {
+	CardNum     string `json:"cardNum"`
+	Pin         string `json:"pin"`
+}
+
 type AuthAdminCredentials struct {
 	Name  string `json:"name"`
 	Phone string `json:"phone"`

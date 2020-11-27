@@ -10,7 +10,7 @@ import (
 func SetupRouter() *gin.Engine {
   r := gin.Default()
   accountGroup := r.Group("/accounts-api")
-  accountGroup.Use(middleware.AuthorizeAdminJWT())
+  accountGroup.Use(middleware.AuthorizeJWT())
   {
     accountGroup.GET("account", controllers.GetAccounts)
     accountGroup.POST("account", controllers.CreateAccount)
@@ -19,7 +19,7 @@ func SetupRouter() *gin.Engine {
     accountGroup.DELETE("account/:id", controllers.DeleteAccount)
   }
   cardGroup := r.Group("/cards-api")
-  cardGroup.Use(middleware.AuthorizeAdminJWT())
+  cardGroup.Use(middleware.AuthorizeJWT())
   {
     cardGroup.GET("card/:id", controllers.GetCardsByHolderID)
     cardGroup.PUT("card/:id", controllers.UpdateCard)
@@ -29,11 +29,12 @@ func SetupRouter() *gin.Engine {
   {
     authGroup.POST("login", controllers.AuthAccount)
     authGroup.POST("auth", controllers.AuthAdmin)
+    authGroup.POST("pin", controllers.AuthAccountPIN)
   }
   transactionGroup := r.Group("/transactions-api")
-  transactionGroup.Use(middleware.AuthorizeJWT())
+  transactionGroup.Use(middleware.AuthorizeTransactionJWT())
   {
-    transactionGroup.GET("transaction/:id", controllers.GetTransactionById)
+    transactionGroup.GET("transaction/:trId", controllers.GetTransactionById)
     transactionGroup.GET("transactions/:id", controllers.GetTransactionsById)
     transactionGroup.POST("transaction", controllers.CreateTransaction)
   }

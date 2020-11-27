@@ -67,7 +67,7 @@ func UpdateCard(card *Card) (err error) {
 
 func ProcessTransaction(transaction Transaction) (err error) {
 	var card Card
-	if err = config.DB.Where("id = ?", transaction.CardID).Find(card).Error; err != nil {
+	if err = config.DB.Where("id = ?", transaction.CardID).Find(&card).Error; err != nil {
 		log.Println(err)
 		return err
 	}

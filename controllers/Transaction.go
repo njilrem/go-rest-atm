@@ -25,7 +25,10 @@ func GetTransactionsById(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, transactions)
+		c.JSON(http.StatusOK, gin.H{
+			"transactions": transactions,
+			"quantity": len(transactions),
+		})
 	}
 }
 

@@ -50,6 +50,17 @@ func GetAccountByCredentials(credentials dto.AuthCredentials, account *Account) 
 	return nil
 }
 
+func GetAccountByCardNum(credentials dto.AuthCredentialsPIN, account *Account) (err error) {
+	if err = config.DB.Where("cards.card_num = ?", credentials.CardNum).
+		Joins("JOIN cards on cards.holder_id=accounts.id").
+		Preload("Card").
+		Find(account).
+		Error; err != nil {
+			return err
+	}
+	return nil
+}
+
 func GetAuthAccount(credentials dto.AuthAdminCredentials, account *Account) (err error) {
 	if len(credentials.Phone) != 15 && len(credentials.Name) != 10{
 		return errors.New("bad credentials")
