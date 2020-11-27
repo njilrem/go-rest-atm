@@ -2,7 +2,7 @@ version: '3.3'
 services:
   atm-core:
     container_name: atm-core
-    build: ./
+    image: njilrem/atm-core
     ports:
       - "8080:8080"
     env_file:
