@@ -17,7 +17,7 @@ type DBConfig struct {
 }
 func BuildDBConfig() *DBConfig {
 	dbConfig := DBConfig{
-	 Host:     "host.docker.internal",
+	 Host:     "localhost",
 	 Port:     3306,
 	 User:     os.Getenv("MYSQL_USER"),
 	 Password: os.Getenv("MYSQL_PASSWORD"),
