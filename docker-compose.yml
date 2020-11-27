@@ -14,6 +14,7 @@ services:
       - db
   db:
     container_name: atm-db
+    hostname: atm-db
     image: mysql:5.7
     restart: always
     env_file: .env
