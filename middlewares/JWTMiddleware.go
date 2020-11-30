@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/njilrem/go-rest-atm/models"
 	"github.com/njilrem/go-rest-atm/services"
 	"net/http"
 
@@ -99,17 +98,9 @@ func AuthorizeTransactionJWT() gin.HandlerFunc {
 		}
 		if token.Valid {
 			claims := token.Claims.(jwt.MapClaims)
-			fmt.Println(claims)
-			id := c.Param("id")
-			fmt.Println(id)
-			trId := c.Param("trId")
-			fmt.Println("K" + trId)
-			var transaction models.Transaction
-			err := c.BindJSON(&transaction)
-			if err != nil {
-				c.AbortWithStatus(http.StatusBadRequest)
-				return
-			}
+			// add id verification, so only those with ID can
+			fmt.Println(c.Request.GetBody())
+			fmt.Println(claims["ID"])
 		} else {
 			fmt.Println("Error")
 			fmt.Println(err)

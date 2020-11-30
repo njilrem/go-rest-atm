@@ -37,7 +37,13 @@ func GetAccounts(c *gin.Context) {
 	if err != nil {
 	 c.AbortWithStatus(http.StatusNotFound)
 	} else {
-	 c.JSON(http.StatusOK, account)
+	 c.JSON(http.StatusOK, gin.H{
+		 "name": account.Name,
+		 "surname": account.Email,
+		 "cardNum": account.Card[0].CardNum,
+		 "expDate": account.Card[0].ExpireDate,
+		 "balance": account.Card[0].Balance,
+	 })
 	}
  }
  //UpdateAccount ... Update the account information

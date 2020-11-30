@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/njilrem/go-rest-atm/models"
 	"log"
@@ -53,4 +54,30 @@ func CreateTransaction(c *gin.Context) {
 			c.JSON(http.StatusOK, transaction)
 		}
 	}
+}
+
+func Refill(c *gin.Context) {
+	var transaction models.Transaction
+	err := c.BindJSON(&transaction)
+	if err != nil {
+		fmt.Println(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	fmt.Println(transaction)
+	err = models.CreateTransaction(&transaction)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	} else {
+		err = models.ProcessRefillTransaction(transaction)
+		if err != nil {
+			log.Println("TRANSACTION FAILED")
+			err = models.DeleteTransaction(&transaction)
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		} else {
+			c.JSON(http.StatusOK, transaction)
+		}
+	}
+
 }

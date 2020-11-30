@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"github.com/njilrem/go-rest-atm/config"
 	"golang.org/x/crypto/bcrypt"
@@ -71,8 +72,43 @@ func ProcessTransaction(transaction Transaction) (err error) {
 		log.Println(err)
 		return err
 	}
+	if transaction.Amount > card.Balance {
+		return errors.New("SORRY YOU HAVE NO MONEY")
+	}
+	card.Balance -= transaction.Amount
+
+	var receiverCard Card
+	fmt.Println(receiverCard)
+	if err = config.DB.Where("card_num = ?", transaction.CardNum).Find(&receiverCard).Error; err != nil {
+		/* IMAGINE PROCESSING A BANK OPERATION OF TRANSFERRING MONEY TO the other bank OVER HERE*/
+	}
+
+
+	config.DB.Save(card)
+	return nil
+}
+
+func ProcessRefillTransaction(transaction Transaction) (err error) {
+	var card Card
+	if err = config.DB.Where("card_num = ?", transaction.CardNum).Find(&card).Error; err != nil {
+		log.Println(err)
+		return err
+	}
+	if transaction.Amount > card.Balance {
+		return errors.New("SORRY YOU HAVE NO MONEY")
+	}
 	card.Balance -= transaction.Amount
 	/* IMAGINE PROCESSING A BANK OPERATION OF TRANSFERRING MONEY OVER HERE TSSSSS */
 	config.DB.Save(card)
+
+	var refillingCard Card
+	if err = config.DB.Where("id = ?", transaction.CardID).Find(&refillingCard).Error; err != nil {
+		log.Println(err)
+		return err
+	}
+	fmt.Println("Card Balance")
+	fmt.Println(refillingCard.Balance)
+	refillingCard.Balance += transaction.Amount
+	config.DB.Save(refillingCard)
 	return nil
 }

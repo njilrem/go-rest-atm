@@ -45,3 +45,19 @@ func UpdateCard(c *gin.Context) {
 		c.JSON(http.StatusOK, card)
 	}
 }
+
+func GetBalance(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var card models.Card
+	err := models.GetCardById(&card, id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"balance": card.Balance,
+			"id": card.ID,
+			"card_num": card.CardNum,
+			"holder_id": card.HolderID,
+		})
+	}
+}

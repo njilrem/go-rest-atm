@@ -24,6 +24,7 @@ func SetupRouter() *gin.Engine {
     cardGroup.GET("card/:id", controllers.GetCardsByHolderID)
     cardGroup.PUT("card/:id", controllers.UpdateCard)
     cardGroup.POST("card", controllers.CreateCard)
+    cardGroup.GET("balance/:id", controllers.GetBalance)
   }
   authGroup := r.Group("/auth")
   {
@@ -35,8 +36,10 @@ func SetupRouter() *gin.Engine {
   transactionGroup.Use(middleware.AuthorizeTransactionJWT())
   {
     transactionGroup.GET("transaction/:trId", controllers.GetTransactionById)
+
     transactionGroup.GET("transactions/:id", controllers.GetTransactionsById)
     transactionGroup.POST("transaction", controllers.CreateTransaction)
+    transactionGroup.POST("refill", controllers.Refill)
   }
   return r
 }
