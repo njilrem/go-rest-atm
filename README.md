@@ -28,4 +28,12 @@ SECRET=avufyts4srtfuygbu7r76r5fiygiu
 
 If you want to populate DB you can use the routes or go to
 *localhost:8080/init/data* to insert 1 account with 1 card and 1 transaction
+
+***
+
+Credentials for that /init/data account would then be
+* Card Number: 5527532727647849
+* Pin: 2222
+* CVV: 222
+* Exp Date: 8/24/2028
  
