@@ -28,9 +28,6 @@ func AuthorizeJWT() gin.HandlerFunc {
 			return
 		}
 		if token.Valid {
-			claims := token.Claims.(jwt.MapClaims)
-			fmt.Println(claims)
-
 		} else {
 			fmt.Println("Error")
 			fmt.Println(err)

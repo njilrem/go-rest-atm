@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	valid "github.com/asaskevich/govalidator"
 	"github.com/njilrem/go-rest-atm/config"
 	"github.com/njilrem/go-rest-atm/dto"
 
@@ -22,10 +23,16 @@ func GetAllAccounts(account *[]Account) (err error) {
 
 //CreateAccount ... Insert New data
 func CreateAccount(account *Account) (err error) {
-	if err = config.DB.Create(account).Error; err != nil {
-		return err
+	var result bool
+	result, err = valid.ValidateStruct(account)
+	if result {
+		if err = config.DB.Create(account).Error; err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("validation error")
 	}
-	return nil
 }
 
 //GetAccountByID ... Fetch only one account by Id

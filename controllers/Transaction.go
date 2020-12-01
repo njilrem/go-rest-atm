@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/njilrem/go-rest-atm/models"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -42,7 +42,7 @@ func CreateTransaction(c *gin.Context) {
 	}
 	err = models.CreateTransaction(&transaction)
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusBadRequest)
 	} else {
 		err = models.ProcessTransaction(transaction)
 		if err != nil {
@@ -64,7 +64,7 @@ func Refill(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	fmt.Println(transaction)
+	log.Info(transaction)
 	err = models.CreateTransaction(&transaction)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)

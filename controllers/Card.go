@@ -23,8 +23,8 @@ func CreateCard(c *gin.Context) {
 	_ = c.BindJSON(&card)
 	err := models.CreateCard(&card)
 	if err != nil {
-		fmt.Printf(err.Error())
-		c.AbortWithStatus(http.StatusInternalServerError)
+		fmt.Println(err)
+		c.AbortWithStatus(http.StatusBadRequest)
 	} else {
 		c.JSON(http.StatusOK, card)
 	}

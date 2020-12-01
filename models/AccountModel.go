@@ -11,10 +11,10 @@ type Account struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	Name      string 	     `json:"name"`
-	Email     string 	     `json:"email"`
-	Phone     string 	     `json:"phone"`
-	Address   string 	     `json:"address"`
+	Name      string 	     `json:"name"  valid:"required"`
+	Email     string 	     `json:"email" valid:"required,email"`
+	Phone     string 	     `json:"phone" valid:"required,numeric"`
+	Address   string 	     `json:"address" valid:"required"`
 	Card      []Card 		 `gorm:"foreignKey:HolderID"`
 }
 

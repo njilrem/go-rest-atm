@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+	valid "github.com/asaskevich/govalidator"
 	"github.com/njilrem/go-rest-atm/config"
 	"log"
 )
@@ -22,12 +24,17 @@ func GetTransactionsByCardId(transactions *[]Transaction, id string) (err error)
 }
 
 func CreateTransaction(transaction *Transaction) (err error) {
-
-	if err = config.DB.Create(transaction).Error; err != nil {
-		log.Println(err)
-		return err
+	var result bool
+	result, err = valid.ValidateStruct(transaction)
+	if result {
+		if err = config.DB.Create(transaction).Error; err != nil {
+			log.Println(err)
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("validation error")
 	}
-	return nil
 }
 
 func DeleteTransaction(transaction *Transaction) (err error) {

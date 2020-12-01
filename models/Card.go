@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	valid "github.com/asaskevich/govalidator"
 	"github.com/njilrem/go-rest-atm/config"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -25,23 +26,29 @@ func GetCardsByHolderId(card *[]Card, holderID string) (err error) {
 }
 
 func CreateCard(card *Card) (err error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(card.Cvv2), bcrypt.DefaultCost)
-	if err != nil {
-		log.Warn(err)
-		return err
+	var result bool
+	result, err = valid.ValidateStruct(card)
+	if result {
+		hash, err := bcrypt.GenerateFromPassword([]byte(card.Cvv2), bcrypt.DefaultCost)
+		if err != nil {
+			log.Warn(err)
+			return err
+		}
+		card.Cvv2 = string(hash)
+		hash, err = bcrypt.GenerateFromPassword([]byte(card.Pin), bcrypt.DefaultCost)
+		if err != nil {
+			log.Warn(err)
+			return err
+		}
+		card.Pin = string(hash)
+		if err = config.DB.Create(card).Error; err != nil {
+			log.Warn(err)
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("validation error")
 	}
-	card.Cvv2 = string(hash)
-	hash, err = bcrypt.GenerateFromPassword([]byte(card.Pin), bcrypt.DefaultCost)
-	if err != nil {
-		log.Warn(err)
-		return err
-	}
-	card.Pin = string(hash)
-	if err = config.DB.Create(card).Error; err != nil {
-		log.Warn(err)
-		return err
-	}
-	return nil
 }
 
 func UpdateCard(card *Card) (err error) {

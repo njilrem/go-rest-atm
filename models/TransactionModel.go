@@ -10,10 +10,11 @@ type Transaction struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	CardID    uint `json:"card_id"`
-	CardNum   string `json:"card_num"`
-	Amount    float64 `json:"amount"`
-	TransactionDate time.Time `json:"transaction_date"`
+	CardID    uint `json:"card_id" valid:"required"`
+	CardNum   string `json:"card_num" valid:"required, creditcard"`
+	Amount    float64 `json:"amount" valid:"required"`
+	TransactionDate time.Time `json:"transaction_date" valid:"required"`
+	Comment   string `json:"comment" valid:"required"`
 }
 
 func (b* Transaction) TableName() string {
