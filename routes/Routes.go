@@ -41,6 +41,10 @@ func SetupRouter() *gin.Engine {
     transactionGroup.POST("transaction", controllers.CreateTransaction)
     transactionGroup.POST("refill", controllers.Refill)
   }
+  initGroup := r.Group("/init")
+  {
+    initGroup.GET("/data", controllers.InitData)
+  }
   return r
 }
 
