@@ -12,7 +12,7 @@ type Transaction struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	CardID    uint `json:"card_id" valid:"required"`
 	CardNum   string `json:"card_num" valid:"required, creditcard"`
-	Amount    float64 `json:"amount" valid:"required"`
+	Amount    float64 `json:"amount" valid:"required, range(1|99999999)"`
 	TransactionDate time.Time `json:"transaction_date" valid:"required"`
 	Comment   string `json:"comment" valid:"required"`
 }

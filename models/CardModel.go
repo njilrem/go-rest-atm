@@ -13,9 +13,9 @@ type Card struct {
 	Balance    float64		  `json:"balance"`
 	Cvv2       string 		  `json:"cvv2"`
 	Pin        string		  `json:"pin"`
-	CardNum    string 		  `json:"cardNum" valid:"creditcard"`
-	ExpireDate string 		  `json:"expireDate"`
-	HolderID   uint   		  `json:"holderID" valid:"int"`
+	CardNum    string 		  `json:"cardNum" valid:"creditcard, required"`
+	ExpireDate string 		  `json:"expireDate" valid:"required"`
+	HolderID   uint   		  `json:"holderID" valid:"int, required"`
 	Transaction []Transaction `gorm:"foreignKey:card_id"`
 }
 
