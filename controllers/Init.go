@@ -12,7 +12,7 @@ func InitData(c *gin.Context){
 	var account models.Account
 	account.Name = "Dereka"
 	account.Email = "derekaBood@mail.com"
-	account.Phone = "+673829295333"
+	account.Phone = "673829295333"
 	account.Address = "Drezden city, Center"
 
 	err := models.CreateAccount(&account)
@@ -39,5 +39,38 @@ func InitData(c *gin.Context){
 	transaction.CardID = card.ID
 	transaction.TransactionDate = time.Now()
 	transaction.Amount = 29.9
+	transaction.Comment = "First Transaction"
+
+	var accountL models.Account
+	accountL.Name = "Dereka Brother"
+	accountL.Email = "derekaBoodAA@mail.com"
+	accountL.Phone = "673829295333"
+	accountL.Address = "Drezden city, Center"
+
+	err = models.CreateAccount(&account)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+
+	var cardL models.Card
+	cardL.CardNum = "5507770244348111"
+	cardL.Balance = 500
+	cardL.ExpireDate = "8/24/2028"
+	cardL.HolderID = account.ID
+	cardL.Pin = "2222"
+	cardL.Cvv2 = "222"
+
+	err = models.CreateCard(&card)
+	if err != nil {
+		fmt.Printf(err.Error())
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+
+	var transactionL models.Transaction
+	transactionL.CardNum = "2221000230411810"
+	transactionL.CardID = card.ID
+	transactionL.TransactionDate = time.Now()
+	transactionL.Amount = 29.9
+	transactionL.Comment = "First Transaction"
 
 }
