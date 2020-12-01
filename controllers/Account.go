@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/njilrem/go-rest-atm/models"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ func GetAccounts(c *gin.Context) {
 	var account []models.Account
 	err := models.GetAllAccounts(&account)
 	if err != nil {
-	 c.AbortWithStatus(http.StatusNotFound)
+		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 	 c.JSON(http.StatusOK, account)
 	}
@@ -23,7 +23,7 @@ func GetAccounts(c *gin.Context) {
 	c.BindJSON(&account)
 	err := models.CreateAccount(&account)
 	if err != nil {
-	 fmt.Println(err.Error())
+	 log.Warn(err.Error())
 	 c.AbortWithStatus(http.StatusInternalServerError)
 	} else {
 	 c.JSON(http.StatusOK, account)

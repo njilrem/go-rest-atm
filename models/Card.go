@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/njilrem/go-rest-atm/config"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 )
 
 func GetCardById(card *Card, id string) (err error) {
 	if err = config.DB.Where("id = ?", id).Find(card).Error; err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
 	return nil
@@ -18,7 +18,7 @@ func GetCardById(card *Card, id string) (err error) {
 
 func GetCardsByHolderId(card *[]Card, holderID string) (err error) {
 	if err = config.DB.Where("holder_id = ?", holderID).Find(card).Error; err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
 	return nil
@@ -27,29 +27,28 @@ func GetCardsByHolderId(card *[]Card, holderID string) (err error) {
 func CreateCard(card *Card) (err error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(card.Cvv2), bcrypt.DefaultCost)
 	if err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
 	card.Cvv2 = string(hash)
 	hash, err = bcrypt.GenerateFromPassword([]byte(card.Pin), bcrypt.DefaultCost)
 	if err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
 	card.Pin = string(hash)
 	if err = config.DB.Create(card).Error; err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
 	return nil
 }
 
 func UpdateCard(card *Card) (err error) {
-	fmt.Println(card)
 	if len(card.Cvv2) == 3 {
 		hash, err := bcrypt.GenerateFromPassword([]byte(card.Cvv2), bcrypt.DefaultCost)
 		if err != nil {
-			log.Println(err)
+			log.Warn(err)
 			return err
 		}
 		card.Cvv2 = string(hash)
@@ -69,11 +68,12 @@ func UpdateCard(card *Card) (err error) {
 func ProcessTransaction(transaction Transaction) (err error) {
 	var card Card
 	if err = config.DB.Where("id = ?", transaction.CardID).Find(&card).Error; err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
 	if transaction.Amount > card.Balance {
-		return errors.New("SORRY YOU HAVE NO MONEY")
+		log.Info("Insufficient funds!")
+		return errors.New("")
 	}
 	card.Balance -= transaction.Amount
 
@@ -81,33 +81,19 @@ func ProcessTransaction(transaction Transaction) (err error) {
 	fmt.Println(receiverCard)
 	if err = config.DB.Where("card_num = ?", transaction.CardNum).Find(&receiverCard).Error; err != nil {
 		/* IMAGINE PROCESSING A BANK OPERATION OF TRANSFERRING MONEY TO the other bank OVER HERE*/
+		log.Info("Transaction is incomplete, receiver's card belongs to other bank")
 	}
-
 
 	config.DB.Save(card)
 	return nil
 }
 
 func ProcessRefillTransaction(transaction Transaction) (err error) {
-	var card Card
-	if err = config.DB.Where("card_num = ?", transaction.CardNum).Find(&card).Error; err != nil {
-		log.Println(err)
-		return err
-	}
-	if transaction.Amount > card.Balance {
-		return errors.New("SORRY YOU HAVE NO MONEY")
-	}
-	card.Balance -= transaction.Amount
-	/* IMAGINE PROCESSING A BANK OPERATION OF TRANSFERRING MONEY OVER HERE TSSSSS */
-	config.DB.Save(card)
-
 	var refillingCard Card
 	if err = config.DB.Where("id = ?", transaction.CardID).Find(&refillingCard).Error; err != nil {
-		log.Println(err)
+		log.Warn(err)
 		return err
 	}
-	fmt.Println("Card Balance")
-	fmt.Println(refillingCard.Balance)
 	refillingCard.Balance += transaction.Amount
 	config.DB.Save(refillingCard)
 	return nil

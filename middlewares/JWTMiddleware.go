@@ -97,12 +97,11 @@ func AuthorizeTransactionJWT() gin.HandlerFunc {
 			return
 		}
 		if token.Valid {
-			claims := token.Claims.(jwt.MapClaims)
-			// add id verification, so only those with ID can
-			fmt.Println(c.Request.GetBody())
-			fmt.Println(claims["ID"])
+			//claims := token.Claims.(jwt.MapClaims)
+			//var transactionInfo dto.AuthTransaction
+			//err := c.ShouldBind(transactionInfo)
+			return
 		} else {
-			fmt.Println("Error")
 			fmt.Println(err)
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return

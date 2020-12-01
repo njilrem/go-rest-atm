@@ -22,6 +22,7 @@ func GetTransactionsByCardId(transactions *[]Transaction, id string) (err error)
 }
 
 func CreateTransaction(transaction *Transaction) (err error) {
+
 	if err = config.DB.Create(transaction).Error; err != nil {
 		log.Println(err)
 		return err

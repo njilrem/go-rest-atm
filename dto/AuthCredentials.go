@@ -17,3 +17,7 @@ type AuthAdminCredentials struct {
 	Name  string `json:"name"`
 	Phone string `json:"phone"`
 }
+
+type AuthTransaction struct {
+	ID string `json:"card_id"`
+}

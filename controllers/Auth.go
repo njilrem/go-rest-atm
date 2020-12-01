@@ -6,6 +6,7 @@ import (
 	"github.com/njilrem/go-rest-atm/dto"
 	"github.com/njilrem/go-rest-atm/models"
 	"github.com/njilrem/go-rest-atm/services"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
@@ -30,6 +31,7 @@ func AuthAccount(c *gin.Context) {
 		return
 	} else {
 		card := account.Card[0]
+		log.Info("Account Authorized")
 		token := services.JWTAuthService().GenerateToken(card.CardNum, card.ExpireDate, card.Cvv2, false)
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	}
@@ -57,6 +59,7 @@ func AuthAccountPIN(c *gin.Context) {
 		return
 	} else {
 		card := account.Card[0]
+		log.Info("Account Authorized With Pin")
 		token := services.JWTAuthService().GenerateToken(card.CardNum, card.ExpireDate, card.Cvv2, false)
 		c.JSON(http.StatusOK, gin.H{
 			"token": token,
@@ -87,6 +90,7 @@ func AuthAdmin(c *gin.Context) {
 		return
 	} else {
 		card := account.Card[0]
+		log.Info("Admin Account Authorized")
 		token := services.JWTAuthService().GenerateToken(card.CardNum, card.ExpireDate, card.Cvv2, true)
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	}
