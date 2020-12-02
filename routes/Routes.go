@@ -44,6 +44,7 @@ func SetupRouter() *gin.Engine {
   initGroup := r.Group("/init")
   {
     initGroup.GET("/data", controllers.InitData)
+    initGroup.GET("/clean", controllers.DropData)
   }
   return r
 }

@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/njilrem/go-rest-atm/config"
 	"github.com/njilrem/go-rest-atm/models"
 	"net/http"
 	"time"
@@ -41,13 +42,19 @@ func InitData(c *gin.Context){
 	transaction.Amount = 29.9
 	transaction.Comment = "First Transaction"
 
+	err = models.CreateTransaction(&transaction)
+	if err != nil {
+		fmt.Printf(err.Error())
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+
 	var accountL models.Account
 	accountL.Name = "Dereka Brother"
 	accountL.Email = "derekaBoodAA@mail.com"
 	accountL.Phone = "673829295333"
 	accountL.Address = "Drezden city, Center"
 
-	err = models.CreateAccount(&account)
+	err = models.CreateAccount(&accountL)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
@@ -56,11 +63,11 @@ func InitData(c *gin.Context){
 	cardL.CardNum = "5507770244348111"
 	cardL.Balance = 500
 	cardL.ExpireDate = "8/24/2028"
-	cardL.HolderID = account.ID
+	cardL.HolderID = accountL.ID
 	cardL.Pin = "2222"
 	cardL.Cvv2 = "222"
 
-	err = models.CreateCard(&card)
+	err = models.CreateCard(&cardL)
 	if err != nil {
 		fmt.Printf(err.Error())
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -68,9 +75,21 @@ func InitData(c *gin.Context){
 
 	var transactionL models.Transaction
 	transactionL.CardNum = "2221000230411810"
-	transactionL.CardID = card.ID
+	transactionL.CardID = cardL.ID
 	transactionL.TransactionDate = time.Now()
 	transactionL.Amount = 29.9
 	transactionL.Comment = "First Transaction"
 
+	err = models.CreateTransaction(&transactionL)
+	if err != nil {
+		fmt.Printf(err.Error())
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+
+}
+
+func DropData(c *gin.Context) {
+	config.DB.Exec("DROP TABLE transactions")
+	config.DB.Exec("DROP TABLE cards")
+	config.DB.Exec("DROP TABLE accounts")
 }
