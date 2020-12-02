@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	valid "github.com/asaskevich/govalidator"
 	"github.com/njilrem/go-rest-atm/config"
 	"log"
@@ -33,6 +34,7 @@ func CreateTransaction(transaction *Transaction) (err error) {
 		}
 		return nil
 	} else {
+		fmt.Println(transaction)
 		return errors.New("validation error")
 	}
 }

@@ -2,11 +2,11 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	valid "github.com/asaskevich/govalidator"
 	"github.com/njilrem/go-rest-atm/config"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 func GetCardById(card *Card, id string) (err error) {
@@ -85,11 +85,23 @@ func ProcessTransaction(transaction Transaction) (err error) {
 	card.Balance -= transaction.Amount
 
 	var receiverCard Card
-	fmt.Println(receiverCard)
 	if err = config.DB.Where("card_num = ?", transaction.CardNum).Find(&receiverCard).Error; err != nil {
 		/* IMAGINE PROCESSING A BANK OPERATION OF TRANSFERRING MONEY TO the other bank OVER HERE*/
 		log.Info("Transaction is incomplete, receiver's card belongs to other bank")
 	}
+	if len(receiverCard.Cvv2) > 3 {
+		receiverCard.Balance += transaction.Amount
+		var transactionReceiver Transaction
+		transactionReceiver.Amount = transaction.Amount
+		transactionReceiver.Comment = "Receive Transfer"
+		transactionReceiver.TransactionDate = time.Now()
+		transactionReceiver.CardID = receiverCard.ID
+		transactionReceiver.CardNum = receiverCard.CardNum
+		err = CreateTransaction(&transactionReceiver); if err != nil {
+			log.Warn("Transaction creation failed")
+		}
+	}
+
 
 	config.DB.Save(card)
 	return nil

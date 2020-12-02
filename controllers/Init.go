@@ -40,7 +40,7 @@ func InitData(c *gin.Context){
 	transaction.CardID = card.ID
 	transaction.TransactionDate = time.Now()
 	transaction.Amount = 29.9
-	transaction.Comment = "First Transaction"
+	transaction.Comment = "Deposit"
 
 	err = models.CreateTransaction(&transaction)
 	if err != nil {
@@ -78,7 +78,7 @@ func InitData(c *gin.Context){
 	transactionL.CardID = cardL.ID
 	transactionL.TransactionDate = time.Now()
 	transactionL.Amount = 29.9
-	transactionL.Comment = "First Transaction"
+	transactionL.Comment = "Deposit"
 
 	err = models.CreateTransaction(&transactionL)
 	if err != nil {
