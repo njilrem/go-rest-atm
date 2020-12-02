@@ -36,7 +36,7 @@ func InitData(c *gin.Context){
 	}
 
 	var transaction models.Transaction
-	transaction.CardNum = "2221000230411810"
+	transaction.CardNum = "2221009198076721"
 	transaction.CardID = card.ID
 	transaction.TransactionDate = time.Now()
 	transaction.Amount = 500
@@ -74,7 +74,7 @@ func InitData(c *gin.Context){
 	}
 
 	var transactionL models.Transaction
-	transactionL.CardNum = "2221000230411810"
+	transactionL.CardNum = "2221009198076721"
 	transactionL.CardID = cardL.ID
 	transactionL.TransactionDate = time.Now()
 	transactionL.Amount = 500

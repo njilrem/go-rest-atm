@@ -32,14 +32,14 @@ If you want to populate DB you can use the routes or go to
 ***
 
 Credentials for that /init/data account would then be
-* Card Number: 5527532727647849
+* Card Number: 5527532727647849 5527 5327 2764 7849
 * Pin: 2222
-* CVV: 222
+* CVV: 222 	
 * Exp Date: 8/24/2028
  
  OR
  
- * Card Number: 5507770244348111
+ * Card Number: 5507770244348111 5507 7702 4434 8111
  * Pin: 2222
  * CVV: 222
  * Exp Date: 8/24/2028
